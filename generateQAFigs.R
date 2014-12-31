@@ -3,6 +3,11 @@ source(paste(Sys.getenv('GEN_CODE'),'/myboxplot-stats.R',sep = ''))
 source(paste(Sys.getenv('GEN_CODE'),'/monthlyBP.R',sep = ''))
 library('xlsx')
 
+# ****
+# - can get away from needing the myboxplot files by updating to ggplot2
+# - can also likely get away from xlsx package by creating a csv file in RiverWare
+#   with the necessary slots I need for QA/QC
+
 # compOldTime compares the new data over the old time range
 # scenNames should be data in PreviousRun sheet first, then what you want to call
 # the scenario shown by compOldTime if applicable, then the name of the new run.
