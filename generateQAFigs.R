@@ -17,6 +17,10 @@ library(scales)
 # compOldTime compares the new data over the old time range
 # scenNames should be data in PreviousRun sheet first, then what you want to call
 # the scenario shown by compOldTime if applicable, then the name of the new run.
+
+# iFile should only be file names. The function will look in $NATFLOW_DIR$/results
+# for the files.
+# oFile should be absolute or relative path.
 generateNatFlowQCFigs <- function(iFile,oFile)
 {
 	
