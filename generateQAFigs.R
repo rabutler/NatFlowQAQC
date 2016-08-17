@@ -64,10 +64,22 @@ generateNatFlowQCFigs <- function(iFile,oFile)
 		sheetName = 'LatestRun')
 	prevFlows = read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/',iFile,sep = ''), 
 		sheetName = 'PreviousRun')
-  annSaltN <- read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/', iFile, sep = ''), 
+  	annSaltN <- read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/', iFile, sep = ''), 
                        sheetName = 'LatestRun-Annual')
 	annSaltP <- read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/', iFile, sep = ''), 
 	                      sheetName = 'PreviousRun-Annual')
+  
+#Setting data types; there is prob a cleaner way to do this.  Need to no ncol for execution and didn't want
+#to hardwire length
+	dateCol = 1
+	newFlows = read.xlsx2(paste(Sys.getenv('NATFLOW_DIR'),'/results/',iFile,sep = ''),sheetName='LatestRun', 
+		colClasses = c(rep("Date",dateCol),rep("numeric",ncol(newFlows)-dateCol+1)))
+	prevFlows = read.xlsx2(paste(Sys.getenv('NATFLOW_DIR'),'/results/',iFile,sep = ''),sheetName='PreviousRun', 
+		colClasses = c(rep("Date",dateCol),rep("numeric",ncol(prevFlows)-dateCol+1)))
+	annSaltN <- read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/', iFile, sep = ''), sheetName = 'LatestRun-Annual',
+		colClasses = c(rep("Date",dateCol),rep("numeric",ncol(annSaltN)-dateCol+1)))
+	annSaltP <- read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/', iFile, sep = ''), sheetName = 'PreviousRun-Annual',
+		colClasses = c(rep("Date",dateCol),rep("numeric",ncol(annSaltP)-dateCol+1)))
   
   # format data
   # note summing the concentration slots is pointless. will drop them later
@@ -93,9 +105,12 @@ generateNatFlowQCFigs <- function(iFile,oFile)
   annData <- rbind(newFlowsAnn, prevFlowsAnn)
   names(annData)[1] <- 'Year'
   names(annData)[2] <- 'Variable'
+  
   # remove the annual salinity
   annData <- annData[annData$Variable %in% slots,]
   annData$Variable <- factor(annData$Variable)
+  
+  
   # add FWAAC salt
 	annSaltN[,1] <- 1971:(1970+dim(annSaltN)[1])
 	annSaltP[,1] <- 1971:(1970+dim(annSaltP)[1])
