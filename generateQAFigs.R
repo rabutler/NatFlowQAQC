@@ -64,7 +64,7 @@ generateNatFlowQCFigs <- function(iFile,oFile)
 		sheetName = 'LatestRun')
 	prevFlows = read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/',iFile,sep = ''), 
 		sheetName = 'PreviousRun')
-  	annSaltN <- read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/', iFile, sep = ''), 
+  annSaltN <- read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/', iFile, sep = ''), 
                        sheetName = 'LatestRun-Annual')
 	annSaltP <- read.xlsx(paste(Sys.getenv('NATFLOW_DIR'),'/results/', iFile, sep = ''), 
 	                      sheetName = 'PreviousRun-Annual')
@@ -87,6 +87,10 @@ generateNatFlowQCFigs <- function(iFile,oFile)
   prevFlowsAnn <- RWDataPlot::sumMonth2Annual(prevFlows[,2:21])
 	newFlowsAnn <- cbind(1971:(1970+dim(newFlowsAnn)[1]),newFlowsAnn)
 	prevFlowsAnn <- cbind(1971:(1970+dim(prevFlowsAnn)[1]),prevFlowsAnn)
+	newFlowsAnn <- as.data.frame(newFlowsAnn)
+	prevFlowsAnn <- as.data.frame(prevFlowsAnn)
+	names(newFlowsAnn) <- names(newFlows)
+	names(prevFlowsAnn) <- names(prevFlows)
   
   nw <- melt(newFlows, id.vars = 1, measure.vars = 2:21, value.name = 'Value')
 	prv <- melt(prevFlows, id.vars = 1, measure.vars = 2:21, value.name = 'Value')
